@@ -76,7 +76,10 @@
   }
 }
 .header{
-  background: url(assets/banner.jpg)!important;
+  background: url(../assets/banner.jpg)!important;
+  background-position: center!important;
+  background-repeat: no-repeat!important;
+  background-size: cover!important;
 }
 body {
   margin: 0;

@@ -3,8 +3,29 @@
         <header class="py-5 border-bottom mb-4 header">
             <div class="container">
                 <div class="text-center my-5">
-                    <h1 class="fw-bolder">Blog Buddy</h1>
-                    <p class="lead mb-0">A Blog Website</p>
+
+                <?php
+                    if(isset($_GET["cat_id"])){
+                        $cat_id = $_GET["cat_id"];
+                        $query = "SELECT * FROM category where c_id='$cat_id'";
+                        $result = mysqli_query($db,$query);
+                        $isPost = mysqli_num_rows($result);
+                        if($isPost == 0){
+                            echo "<span style='font-size:72px;font-weight:700'>No Category found</span>";
+                        }
+                        while($row = mysqli_fetch_assoc($result)){
+                            $c_id = $row["c_id"];
+                            $c_name = $row["c_name"];
+                            $c_desc = $row["c_desc"];
+                            $p_count= $row["p_count"];
+                            ?>
+                                <h1 class="fw-bolder"><?php echo $c_name; ?></h1>
+                                <p class="lead mb-0"><?php echo $c_desc; ?></p>
+                            <?php
+                        }
+                    }
+                ?>
+                    
                 </div>
             </div>
         </header>
@@ -15,8 +36,11 @@
                 <div class="col-lg-8">
                     <!-- Featured blog post-->
                     <?php 
-                        $query = "SELECT * FROM posts ORDER BY p_id Desc";
+                        $query = "SELECT * FROM posts WHERE cat_id ='$cat_id'";
                         $view_result = mysqli_query($db, $query);
+                        if($p_count == 0){
+                            echo "<span style='font-size:36px;font-weight:700';text-align:center;>No Post Found! <a href='index.php' style='text-decoration:none;'>Back to Home</a></span>";
+                        }
                         while($row = mysqli_fetch_assoc($view_result)){
                             $p_id          = $row['p_id'];
                             $p_title       = $row['p_title'];
@@ -32,7 +56,7 @@
                                     <div class="card-body">
                                         <div class="small text-muted"><?php echo $p_date; ?></div>
                                         <h2 class="card-title"><?php echo $p_title; ?></h2>
-                                        <a href="#" style = "color:#000;font-weight:bold;text-decoration:none;margin-bottom=10px;">By 
+                                        <a href="#">By 
                                         <?php 
                                             $query2 = "SELECT * FROM users WHERE u_id='$user_id'";
                                             $view_result2 = mysqli_query($db, $query2);

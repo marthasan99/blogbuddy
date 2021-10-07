@@ -21,14 +21,14 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                         <?php 
-                            $query = "SELECT * FROM category ORDER BY c_name ASC";
+                            $query = "SELECT * FROM category ORDER BY p_count DESC";
                             $result = mysqli_query($db,$query);
                             while($row = mysqli_fetch_assoc($result)){
                                 $c_id = $row["c_id"];
                                 $c_name = $row["c_name"];
                                 $c_desc = $row["c_desc"];
                                 ?>
-                                    <li class="nav-item"><a class="nav-link" href="#"><?php echo $c_name;?></a></li>
+                                    <li class="nav-item"><a class="nav-link" href="category-page.php?cat_id=<?php echo $c_id; ?>"><?php echo $c_name;?></a></li>
                                 <?php
                             }
                         ?>
