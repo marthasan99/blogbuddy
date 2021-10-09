@@ -1,15 +1,17 @@
 <!-- Side widgets-->
 <div class="col-lg-4">
                     <!-- Search widget-->
-                    <div class="card mb-4">
-                        <div class="card-header">Search</div>
-                        <div class="card-body">
-                            <div class="input-group">
-                                <input class="form-control" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
-                                <button class="btn btn-primary" id="button-search" type="button">Go!</button>
+                    <form action="search.php" method="POST">
+                        <div class="card mb-4">
+                            <div class="card-header">Search</div>
+                            <div class="card-body">
+                                <div class="input-group">
+                                    <input class="form-control" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" name="search_text" />
+                                    <button class="btn btn-primary" id="button-search" type="submit" name="search">Go!</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
                     <!-- Categories widget-->
                     <div class="card mb-4">
                         <div class="card-header">Popular Categories</div>
@@ -60,17 +62,19 @@
                                     ?>
                                         <div class="row">
                                             <div class="col-md-4" style="height:100px">
-                                                <img class="img-fluid align-middle" src="admin/assets/images/posts/<?php echo $p_thumbnail; ?>">
+                                                <img class="img-fluid align-middle" href="singlepage.php?post_id=<?php echo $p_id; ?>" src="admin/assets/images/posts/<?php echo $p_thumbnail; ?>">
                                             </div>
-                                            <div class="col-md-8">
+                                            <div class="col-md-8" >
                                                 <h4>
-                                                    <?php 
-                                                        if(strlen($p_title<= 30)){
-                                                            echo $p_title;
-                                                        }else{
-                                                            echo substr($p_title,0,30)."...";
-                                                        }
-                                                    ?>
+                                                    <a href="singlepage.php?post_id=<?php echo $p_id; ?>">
+                                                        <?php 
+                                                            if(strlen($p_title<= 30)){
+                                                                echo $p_title;
+                                                            }else{
+                                                                echo substr($p_title,0,30)."...";
+                                                            }
+                                                        ?>
+                                                    </a>
                                                 </h4>
                                             </div>
                                         </div>

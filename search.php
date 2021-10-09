@@ -3,8 +3,8 @@
         <header class="py-5 border-bottom mb-4 header">
             <div class="container">
                 <div class="text-center my-5">
-                    <h1 class="fw-bolder">Blog Buddy</h1>
-                    <p class="lead mb-0">A Blog Website</p>
+                    <h1 class="fw-bolder">Seach Result</h1>
+                    <p class="lead mb-0"></p>
                 </div>
             </div>
         </header>
@@ -15,18 +15,26 @@
                 <div class="col-lg-8">
                     <!-- Featured blog post-->
                     <?php 
-                        $query = "SELECT * FROM posts ORDER BY p_id Desc";
-                        $view_result = mysqli_query($db, $query);
-                        while($row = mysqli_fetch_assoc($view_result)){
-                            $p_id          = $row['p_id'];
-                            $p_title       = $row['p_title'];
-                            $p_desc        = $row['p_desc'];
-                            $p_thumbnail   = $row['p_thumbnail'];
-                            $cat_id        = $row['cat_id'];
-                            $user_id       = $row['user_id'];
-                            $p_date        = $row['p_date'];
-                            $p_status      = $row['p_status'];
-                            ?>
+                        if(isset($_POST["search"])){
+                            $search_text = mysqli_real_escape_string($db, $_POST["search_text"]);
+                            
+                            $query = "SELECT * FROM posts WHERE p_title LIKE '%$search_text%' OR p_desc LIKE '%$search_text%'";
+                            $view_result = mysqli_query($db, $query);
+                            $search_result_count = mysqli_num_rows($view_result);
+                            if($search_result_count == 0){
+                                echo "No post found. <a href='index.php'>Back to Home</a>";
+                            }
+                            while($row = mysqli_fetch_assoc($view_result)){
+                                $p_id          = $row['p_id'];
+                                $p_title       = $row['p_title'];
+                                $p_desc        = $row['p_desc'];
+                                $p_thumbnail   = $row['p_thumbnail'];
+                                $cat_id        = $row['cat_id'];
+                                $user_id       = $row['user_id'];
+                                $p_date        = $row['p_date'];
+                                $p_status      = $row['p_status'];
+
+                                ?>
                                 <div class="card mb-4">
                                     <a href="#!"><img class="card-img-top" src="admin/assets/images/posts/<?php echo $p_thumbnail; ?>" alt="..." /></a>
                                     <div class="card-body">
@@ -59,6 +67,9 @@
                                     </div>
                                 </div>
                             <?php
+                        }
+                        
+                            
                         }
 
                             
