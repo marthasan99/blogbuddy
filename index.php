@@ -15,7 +15,30 @@
                 <div class="col-lg-8">
                     <!-- Featured blog post-->
                     <?php 
-                        $query = "SELECT * FROM posts ORDER BY p_id Desc";
+
+                        // variable for pagination
+                        $total_post_query= "SELECT SUM(p_count) AS totalPost FROM category";
+                        $total_post_result = mysqli_query($db, $total_post_query);
+                        $row = mysqli_fetch_assoc($total_post_result);
+                        $total_post = $row['totalPost'];
+                        $post_per_page = 3;
+                        if($total_post % $post_per_page == 0){
+                            $total_page = $total_post/$post_per_page;
+                        }else{
+                            $total_page = intval($total_post/$post_per_page)+1;
+                        }
+                        
+
+                        
+                        if(isset($_GET['page_no'])){
+                            $page_no = $_GET['page_no'];
+                            //starting point
+                            $start = ($page_no-1)* $post_per_page;
+                        }else{
+                            header('Location: index.php?page_no=1');
+                        }
+
+                        $query = "SELECT * FROM posts ORDER BY p_id Desc LIMIT $start, $post_per_page";
                         $view_result = mysqli_query($db, $query);
                         while($row = mysqli_fetch_assoc($view_result)){
                             $p_id          = $row['p_id'];
@@ -28,7 +51,7 @@
                             $p_status      = $row['p_status'];
                             ?>
                                 <div class="card mb-4">
-                                    <a href="#!"><img class="card-img-top" src="admin/assets/images/posts/<?php echo $p_thumbnail; ?>" alt="..." /></a>
+                                    <a href="#!"><img class="card-img-top" style="height:400px" src="admin/assets/images/posts/<?php echo $p_thumbnail; ?>" alt="..." /></a>
                                     <div class="card-body">
                                         <div class="small text-muted"><?php echo $p_date; ?></div>
                                         <a class="p_title" href="singlepage.php?post_id=<?php echo $p_id; ?>"><h2 class="card-title"><?php echo $p_title; ?></h2></a>
@@ -67,13 +90,34 @@
                     <nav aria-label="Pagination">
                         <hr class="my-0" />
                         <ul class="pagination justify-content-center my-4">
-                            <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Newer</a></li>
-                            <li class="page-item active" aria-current="page"><a class="page-link" href="#!">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#!">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#!">3</a></li>
-                            <li class="page-item disabled"><a class="page-link" href="#!">...</a></li>
-                            <li class="page-item"><a class="page-link" href="#!">15</a></li>
-                            <li class="page-item"><a class="page-link" href="#!">Older</a></li>
+                            
+                            <?php 
+                                if(isset($_GET['page_no'])){
+                                    $page_no = $_GET['page_no']? $_GET['page_no']:1;
+                                    if($page_no>1 && $page_no<=$total_page){
+                                        ?>
+                                            <li class="page-item"><a class="page-link" href="index.php?page_no=<?php echo $page_no-1; ?>" >Prev</a></li>
+                                        <?php
+                                    }
+                                }
+
+                                for($i=0;$i<$total_page;$i++){
+                                    ?>
+                                        <li class="page-item"><a class="page-link" href="index.php?page_no=<?php echo $i+1; ?>"><?php echo $i+1 ?></a></li>
+                                    <?php
+                                }
+
+                                if(isset($_GET['page_no'])){
+                                    $page_no = $_GET['page_no'];
+                                    if($page_no<$total_page && $page_no>0){
+                                        ?>
+                                            <li class="page-item"><a class="page-link" href="index.php?page_no=<?php echo $page_no+1; ?>">Next</a></li>
+                                        <?php
+                                    }
+                                }
+                            ?>
+
+                            
                         </ul>
                     </nav>
                 </div>

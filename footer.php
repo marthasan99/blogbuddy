@@ -66,7 +66,7 @@
             ?>
                 <div class="row">
                     <div class="col-md-4" style="height:100px">
-                        <img class="img-fluid align-middle" href="singlepage.php?post_id=<?php echo $p_id; ?>" src="admin/assets/images/posts/<?php echo $p_thumbnail; ?>">
+                        <img class="img-fluid align-middle" style="height:75px" href="singlepage.php?post_id=<?php echo $p_id; ?>" src="admin/assets/images/posts/<?php echo $p_thumbnail; ?>">
                     </div>
                     <div class="col-md-8">
                         <li><a href="singlepage.php?post_id=<?php echo $p_id; ?>">

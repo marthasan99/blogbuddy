@@ -52,7 +52,7 @@
                             $p_status      = $row['p_status'];
                             ?>
                                 <div class="card mb-4">
-                                    <a href="#!"><img class="card-img-top" src="admin/assets/images/posts/<?php echo $p_thumbnail; ?>" alt="..." /></a>
+                                    <a href="#!"><img class="card-img-top" style="height:400px" src="admin/assets/images/posts/<?php echo $p_thumbnail; ?>" alt="..." /></a>
                                     <div class="card-body">
                                         <div class="small text-muted"><?php echo $p_date; ?></div>
                                         <h2 class="card-title"><?php echo $p_title; ?></h2>

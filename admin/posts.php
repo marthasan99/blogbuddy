@@ -62,7 +62,7 @@
                                 <tbody>
                                 <!--insert data from database-->
                                     <?php 
-                                        $query = "SELECT * FROM posts";
+                                        $query = "SELECT * FROM posts Order by p_id Desc";
                                         $view_result = mysqli_query($db, $query);
                                         $count = 0;
                                         while($row = mysqli_fetch_assoc($view_result)){
@@ -189,7 +189,7 @@
                                         <div class="form-group">
                                             <label for="formFile" class="form-label">Select a Thumbnail</label>
                                             <input class="form-control" type="file" id="formFile" name="image">
-                                            <p><small class="text-muted">Please use a square photo (JPG, JPEG, PNG)</small></p>
+                                            <p><small class="text-muted">Please use a square photo (JPG, JPEG, PNG, WEBP)</small></p>
                                         </div>
                                         <div class="col-sm-12 d-flex justify-content-end">
                                             <button type="submit" class="btn btn-primary me-1 mb-1" name="add_post">Submit</button>
@@ -201,6 +201,26 @@
                                 </div>
                             </div>
                         </form>
+                        <?php 
+                            // read post count
+                            if(isset($_POST['add_post'])){
+                                $query6 = "SELECT * FROM category ORDER BY c_name ASC";
+                                $result = mysqli_query($db,$query6);
+                                while($row = mysqli_fetch_assoc($result)){
+                                    $c_id = $row["c_id"];
+                                    $c_name = $row["c_name"];
+                                    $c_desc = $row["c_desc"];
+
+                                    $pquery = "SELECT * FROM posts WHERE cat_id='$c_id'";
+                                    $view_result = mysqli_query($db, $pquery);
+                                    $postCount = mysqli_num_rows($view_result);
+
+                                    $p_count_update = "UPDATE category SET p_count='$postCount' WHERE c_id='$c_id'";
+                                    $result5 = mysqli_query($db,$p_count_update);
+                                }
+                            }
+                            
+                        ?>
                         <?php 
                             $currentUser = $_SESSION['u_id'];
                             $currentDate = date("Y-m-d");
@@ -214,12 +234,12 @@
                                 
                                 $extn_array = explode('.',$_FILES['image']['name']);
                                 $extn = strtolower(end($extn_array));
-                                $extentions = array("png", "jpg", "jpeg");
+                                $extentions = array("png", "jpg", "jpeg", "webp");
 
                                 
 
                                 if(in_array($extn,$extentions) === false){
-                                    echo "Please insert PNG, JPG, JPEG format file!";
+                                    echo "Please insert PNG, JPG, JPEG, WEBP format file!";
                                 }else{
                                     $rand = rand();
                                     $updatedname = $rand.$file_name;
@@ -319,7 +339,7 @@
                                             <img src='assets/images/posts/<?php echo $p_thumbnail; ?>' style = "width:350px;height:150px;">
                                             <label for="formFile" class="form-label" style="display:block;">Select Photo</label>
                                             <input class="form-control" type="file" id="formFile" name="image">
-                                            <p><small class="text-muted">Please use a square photo (JPG, JPEG, PNG)</small></p>
+                                            <p><small class="text-muted">Please use a square photo (JPG, JPEG, PNG, WEBP)</small></p>
                                         </div>
                                         <input type="hidden" class="form-controll" name="edit_post_id" value="<?php echo $edit_id; ?>">
                                         <div class="col-sm-12 d-flex justify-content-end">
@@ -338,6 +358,7 @@
         }
         if($do == 'update'){
             //update
+            
             if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 $edit_id = $_POST['edit_post_id'];
                 $p_title = $_POST['p_title'];
@@ -382,6 +403,22 @@
                      }
                 }
 
+            }
+            if($_SERVER['REQUEST_METHOD'] == 'POST'){
+                $query6 = "SELECT * FROM category ORDER BY c_name ASC";
+                $result = mysqli_query($db,$query6);
+                while($row = mysqli_fetch_assoc($result)){
+                    $c_id = $row["c_id"];
+                    $c_name = $row["c_name"];
+                    $c_desc = $row["c_desc"];
+
+                    $pquery = "SELECT * FROM posts WHERE cat_id='$c_id'";
+                    $view_result = mysqli_query($db, $pquery);
+                    $postCount = mysqli_num_rows($view_result);
+
+                    $p_count_update = "UPDATE category SET p_count='$postCount' WHERE c_id='$c_id'";
+                    $result5 = mysqli_query($db,$p_count_update);
+                }
             }
         }
         if($do == 'delete'){
