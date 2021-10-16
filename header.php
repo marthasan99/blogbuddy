@@ -1,4 +1,9 @@
-<?php include "admin/inc/connection.php"; ?>
+<?php 
+    include "admin/inc/connection.php"; 
+    session_start();
+    ob_start();
+    date_default_timezone_set('Asia/Dhaka');
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>

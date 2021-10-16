@@ -114,6 +114,9 @@
 </div>
 
 </footer>
+<?php 
+    ob_end_flush();
+?>
 </html>
 
 <style>

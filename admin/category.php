@@ -224,23 +224,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- Read post count -->
-                                        <?php 
-                                            // $query6 = "SELECT * FROM category ORDER BY c_name ASC";
-                                            // $result = mysqli_query($db,$query6);
-                                            // while($row = mysqli_fetch_assoc($result)){
-                                            //     $c_id = $row["c_id"];
-                                            //     $c_name = $row["c_name"];
-                                            //     $c_desc = $row["c_desc"];
-
-                                            //     $pquery = "SELECT * FROM posts WHERE cat_id='$c_id'";
-                                            //     $view_result = mysqli_query($db, $pquery);
-                                            //     $postCount = mysqli_num_rows($view_result);
-
-                                            //     $p_count_update = "UPDATE category SET p_count='$postCount' WHERE c_id='$c_id'";
-                                            //     $result5 = mysqli_query($db,$p_count_update);
-                                            // }
-                                        ?>
                                         
                                         <!-- Read Category info from database -->
                                         <?php

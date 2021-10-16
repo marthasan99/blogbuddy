@@ -81,42 +81,91 @@
                         ?>
                         
                     <!-- Comments section-->
+                    
                     <section class="mb-5">
-                        <div class="card bg-light">
-                            <div class="card-body">
-                                <!-- Comment form-->
-                                <form class="mb-4"><textarea class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea></form>
-                                <!-- Comment with nested comments-->
-                                <div class="d-flex mb-4">
-                                    <!-- Parent comment-->
-                                    <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                                    <div class="ms-3">
-                                        <div class="fw-bold">Commenter Name</div>
-                                        If you're going to lead a space frontier, it has to be government; it'll never be private enterprise. Because the space frontier is dangerous, and it's expensive, and it has unquantified risks.
-                                        <!-- Child comment 1-->
-                                        <div class="d-flex mt-4">
-                                            <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                                            <div class="ms-3">
-                                                <div class="fw-bold">Commenter Name</div>
-                                                And under those conditions, you cannot establish a capital-market evaluation of that enterprise. You can't get investors.
-                                            </div>
-                                        </div>
-                                        <!-- Child comment 2-->
-                                        <div class="d-flex mt-4">
-                                            <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                                            <div class="ms-3">
-                                                <div class="fw-bold">Commenter Name</div>
-                                                When you put money directly to a problem, it makes a good headline.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Single comment-->
-                                <div class="d-flex">
-                                    <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                                    <div class="ms-3">
-                                        <div class="fw-bold">Commenter Name</div>
-                                        When I look at the universe and all the ways the universe wants to kill us, I find it hard to reconcile that with statements of beneficence.
+                        <div class="container mt-5">
+                            <div class="d-flex justify-content-center row">
+                                <div class="d-flex flex-column col-md-12">
+                                    <div class="coment-bottom bg-light p-2 px-4">
+                                    <?php
+                                        if(isset($_SESSION['u_id']) ){
+                                            $logged_in_id = $_SESSION['u_id'];
+                                            ?>  
+                                                <form method="post">
+                                                    <div class="d-flex flex-row add-comment-section mt-4 mb-4">
+                                                        <img class="img-fluid img-responsive rounded-circle mr-2" src="admin/assets/images/users/<?php echo $_SESSION['u_photo']; ?>" width="38">
+                                                        <input type="text" class="form-control mr-3" placeholder="Add comment" name="comment">
+                                                        <button class="btn btn-primary" type="submit" name="com_submit">Comment</button>
+                                                    </div>
+                                                </form>
+                                            <?php
+                                                $currentUser = $_SESSION['u_id'];
+                                                $currentDate = date("Y-m-d");
+                                                if(isset($_POST['com_submit'])){
+                                                    $comment = $_POST['comment'];
+
+                                                    $com_query = "INSERT INTO comments (post_id,user_id,comment,com_date) VALUES ('$p_id','$user_id','$comment','$currentDate')";
+                                                    $com_result = mysqli_query($db,$com_query);
+                                                    if($com_result){
+                                                        $location = "/blogbuddy/singlepage.php?post_id=$post_id";
+                                                        header("Location:$location");
+
+                                                    }else{
+                                                        die('Comment Add Error'.mysqli_error($db));
+                                                    }
+                                                }
+
+                                                
+                                        }else{
+                                            ?>
+                                                <div>
+                                                    <p>Please <a href="admin/index.php">log in</a> to comment</p>
+                                                </div>
+                                            <?php
+                                        }
+                                        $com_read = "SELECT * FROM comments WHERE post_id='$p_id' Order by com_id ASC";
+                                        $com_read_res = mysqli_query($db, $com_read);
+                                        while($row = mysqli_fetch_assoc($com_read_res)){
+                                            $com_id = $row['com_id'];
+                                            $post_id = $row['post_id'];
+                                            $user_id = $row['user_id'];
+                                            $comment = $row['comment'];
+                                            $com_date = $row['com_date'];
+                                            ?>
+                                                <div class="commented-section mt-2">
+                                                    <div class="d-flex flex-row align-items-center commented-user">
+                                                        <h5 class="mr-2">
+                                                        <?php
+                                                            $userQuery = "SELECT * FROM users WHERE u_id='$user_id'";
+                                                            $userRes = mysqli_query($db, $userQuery);
+                                                            while($row = mysqli_fetch_assoc($userRes)){
+                                                                $u_name = $row['u_name'];
+                                                                echo $u_name;
+                                                            }
+                                                        ?>
+                                                        </h5>
+                                                        <span class="dot mb-1"></span><span class="mb-1 ml-2">
+                                                            <?php 
+                                                                echo $com_date;
+                                                            ?>    
+                                                        </span>
+                                                    </div>
+                                                    <div class="comment-text-sm">
+                                                        <span>
+                                                            <?php 
+                                                                echo $comment;
+                                                            ?>
+                                                        </span>
+                                                    </div>
+                                                    <div class="reply-section">
+                                                        <div class="d-flex flex-row align-items-center voting-icons"><i class="fa fa-sort-up fa-2x mt-3 hit-voting"></i><i class="fa fa-sort-down fa-2x mb-3 hit-voting"></i><span class="ml-2">10</span><span class="dot ml-2"></span>
+                                                            <h6 class="ml-2 mt-1">Reply</h6>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php
+                                        }
+                                    ?>
                                     </div>
                                 </div>
                             </div>
@@ -134,4 +183,38 @@
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
     </body>
+    <style>
+        .bdge {
+            height: 21px;
+            background-color: orange;
+            color: #fff;
+            font-size: 11px;
+            padding: 8px;
+            border-radius: 4px;
+            line-height: 3px
+        }
+
+        .comments {
+            text-decoration: underline;
+            text-underline-position: under;
+            cursor: pointer
+        }
+
+        .dot {
+            height: 7px;
+            width: 7px;
+            margin-top: 3px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block
+        }
+
+        .hit-voting:hover {
+            color: blue
+        }
+
+        .hit-voting {
+            cursor: pointer
+        }
+    </style>
 </html>
