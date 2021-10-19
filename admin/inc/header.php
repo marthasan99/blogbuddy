@@ -111,7 +111,7 @@
                 </a>
                 <ul class="submenu ">
                     <li class="submenu-item ">
-                        <a href="component-badge.html">View All Comments</a>
+                        <a href="comments.php?do=manage">View All Comments</a>
                     </li>
                 </ul>
             </li>

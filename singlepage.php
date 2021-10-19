@@ -89,7 +89,6 @@
                                     <div class="coment-bottom bg-light p-2 px-4">
                                     <?php
                                         if(isset($_SESSION['u_id']) ){
-                                            $logged_in_id = $_SESSION['u_id'];
                                             ?>  
                                                 <form method="post">
                                                     <div class="d-flex flex-row add-comment-section mt-4 mb-4">
